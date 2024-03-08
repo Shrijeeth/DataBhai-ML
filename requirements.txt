@@ -6,3 +6,4 @@ torch==2.2.1
 torchaudio==2.2.1
 torchvision==0.17.1
 transformers==4.38.2
+weaviate-client==4.5.1

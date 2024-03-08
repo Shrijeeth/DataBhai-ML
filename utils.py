@@ -1,4 +1,7 @@
+from typing import Dict
+
 import torch
+import weaviate
 
 
 def get_device_type() -> str:

@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name="databhaiml",
     version='0.0.1',
-    packages=["models"],
+    packages=["models", "rag", "vector_stores"],
     url='',
     license='',
     author='Shrijeeth',
