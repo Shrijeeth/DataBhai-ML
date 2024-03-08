@@ -2,7 +2,7 @@
 
 ## Description
 
-This project is about pretraining and loading models for DataBhai Application
+This package is used to load models and provide utilities for DataBhai Application
 
 ## Prerequisites
 
