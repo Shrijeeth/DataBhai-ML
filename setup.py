@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(
-    name="DataBhai - ML",
+    name="databhaiml",
     version='0.0.1',
-    packages=[],
+    packages=["models"],
     url='',
     license='',
     author='Shrijeeth',
