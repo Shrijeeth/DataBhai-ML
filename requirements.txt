@@ -1,0 +1,8 @@
+--extra-index-url https://download.pytorch.org/whl/cu118 # Change this based on CUDA GPU Version Installed (Optional)
+langchain==0.1.11
+llama_cpp_python==0.2.55
+pandas==2.2.1
+torch==2.2.1
+torchaudio==2.2.1
+torchvision==0.17.1
+transformers==4.38.2

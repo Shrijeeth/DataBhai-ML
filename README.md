@@ -7,7 +7,9 @@ This project is about pretraining and loading models for DataBhai Application
 ## Prerequisites
 
 - Python 3.10 +
-- CUDA 11.7 (Optional)
+- GCC Compiler
+- CMake 3.29.0 +
+- CUDA 11.7 + (Optional)
 
 ## Build Instructions
 
