@@ -14,11 +14,11 @@ torch.set_default_device(get_device_type())
 
 
 class SqlGenerationModel(BaseTextModel, ABC):
-    def __init__(self, is_optimized: bool = False):
+    def __init__(self, model_path: str, tokenizer_path: str, is_optimized: bool = False, **kwargs):
         super().__init__()
-        self.model = None
-        self.tokenizer = None
         self.is_optimized = is_optimized
+        self.model = self.load_model(model_path, **kwargs)
+        self.tokenizer = self.load_tokenizer(tokenizer_path, **kwargs)
 
     def load_model(self, model_path: str, **kwargs) -> transformers.PreTrainedModel | Llama:
         if self.is_optimized:
@@ -36,7 +36,7 @@ class SqlGenerationModel(BaseTextModel, ABC):
 
     def generate(self, inputs: str, max_new_tokens: int = 400, num_beams: int = 1, **kwargs) -> str:
         if self.is_optimized:
-            outputs = self.model(inputs, echo=True, stream=False, max_tokens=2048)
+            outputs = self.model(inputs, echo=True, stream=False, max_tokens=8192)
             return outputs['choices'][0]['text']
         else:
             if (self.tokenizer is None) or (self.model is None):

@@ -10,6 +10,8 @@ class BaseVectorStore(metaclass=abc.ABCMeta):
             callable(subclass.add_documents) and
             hasattr(subclass, "add_texts") and
             callable(subclass.add_texts) and
+            hasattr(subclass, "hybrid_search") and
+            callable(subclass.hybrid_search) and
             hasattr(subclass, "search") and
             callable(subclass.search) or
             NotImplemented
@@ -33,5 +35,12 @@ class BaseVectorStore(metaclass=abc.ABCMeta):
     def search(self, query: str, k: Optional[int] = 5):
         """
         Search the vector store for similar data
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def hybrid_search(self, query: str, whereFilter: Dict, k: Optional[int] = 5):
+        """
+        Search the vector store for similar data with metadata filters
         """
         raise NotImplementedError

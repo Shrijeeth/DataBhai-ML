@@ -40,3 +40,6 @@ class TextToSqlRag:
             },
         ]
         return self.vector_store.add_texts(requirements, metadata=metadata)
+
+    def get_similar_texts(self, query: str, top_k: int = 5):
+        if self.vector_store.num_results
