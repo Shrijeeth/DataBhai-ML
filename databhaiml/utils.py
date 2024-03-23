@@ -1,7 +1,11 @@
-from typing import Dict
+"""
+utils
+~~~~~
+
+This module provides general utilities for Data Bhai ML Package
+"""
 
 import torch
-import weaviate
 
 
 def get_device_type(cpu_strict=False) -> str:

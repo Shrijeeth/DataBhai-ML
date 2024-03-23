@@ -1,8 +1,19 @@
+"""
+base_vector_store
+~~~~~~~~~~~~~~~~~
+
+This module provides a base abstract class to interact with the vector databases.
+"""
+
 import abc
 from typing import List, Optional, Dict
 
 
 class BaseVectorStore(metaclass=abc.ABCMeta):
+    """
+    Base class for vector databases.
+    """
+
     @classmethod
     def __subclasshook__(cls, subclass):
         return (

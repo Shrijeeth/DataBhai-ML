@@ -1,24 +1,36 @@
+"""
+weaviate_vector_store
+~~~~~~~~~~~~~~~~~~~~~
+
+This module provides functionality to interact with the Weaviate vector store.
+"""
+
 from abc import ABC
-from typing import Literal, Optional, List, Dict
+from typing import Optional, List, Dict
+
+import weaviate
 from langchain.vectorstores.weaviate import Weaviate
 from langchain_community.retrievers import (
     WeaviateHybridSearchRetriever,
 )
 from langchain_core.documents import Document
-from langchain_text_splitters import CharacterTextSplitter
-from langchain.embeddings import HuggingFaceBgeEmbeddings
 
 from .base_vector_store import BaseVectorStore
 
-import weaviate
-
 
 class WeaviateVectorStore(BaseVectorStore, ABC):
+    """
+    A class representing a Weaviate vector store.
+    """
+
     def __init__(self, weaviate_url: str, index_name: str, api_key: Optional[str] = None):
         if api_key is None:
             self.client = weaviate.Client(weaviate_url)
         else:
-            self.client = weaviate.Client(weaviate_url, auth_client_secret=weaviate.Auth.AuthApiKey(api_key=api_key))
+            self.client = weaviate.Client(
+                weaviate_url,
+                auth_client_secret=weaviate.Auth.AuthApiKey(api_key=api_key)
+            )
         self.index_name = index_name
         class_obj = {
             "classes": [
@@ -83,6 +95,13 @@ class WeaviateVectorStore(BaseVectorStore, ABC):
         )
 
     def create_vector_store_schema(self, schema: Dict):
+        """
+        Create the vector store schema in Weaviate.
+
+        Args:
+            schema (dict): The schema to create.
+        """
+
         if not self.client.schema.exists(self.index_name):
             self.client.schema.create(schema)
 

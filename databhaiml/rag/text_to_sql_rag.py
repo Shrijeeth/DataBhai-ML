@@ -1,5 +1,12 @@
-from databhaiml.vector_stores.base_vector_store import BaseVectorStore
+"""
+text_to_sql_rag
+~~~~~~~~~~~~~~~
+
+This module provides functionalities for RAG for Text To SQL Tasks
+"""
+
 from enum import Enum
+from databhaiml.vector_stores.base_vector_store import BaseVectorStore
 
 class TextToSqlTypes(Enum):
     TABLE = "TABLE"
@@ -10,7 +17,13 @@ class TextToSqlRag:
     def __init__(self, vector_store: BaseVectorStore):
         self.vector_store = vector_store
 
-    def add_tables(self, table_name: str, table_schema: str, database_name: str, application_name: str):
+    def add_tables(
+        self,
+        table_name: str,
+        table_schema: str,
+        database_name: str,
+        application_name: str
+    ):
         metadata = [
             {
                 "table_name": table_name,
@@ -20,7 +33,7 @@ class TextToSqlRag:
             },
         ]
         return self.vector_store.add_texts([table_schema], metadata=metadata)
-    
+
     def add_instructions(self, instructions: str, database_name: str, application_name: str):
         metadata = [
             {
@@ -30,7 +43,7 @@ class TextToSqlRag:
             },
         ]
         return self.vector_store.add_texts([instructions], metadata=metadata)
-    
+
     def add_requirements(self, requirements: str, database_name: str, application_name: str):
         metadata = [
             {
@@ -41,7 +54,13 @@ class TextToSqlRag:
         ]
         return self.vector_store.add_texts([requirements], metadata=metadata)
 
-    def get_similar_texts(self, query: str, top_k_tables: int = 3, top_k_instructions: int = 5, top_k_requirements: int = 2):
+    def get_similar_texts(
+        self,
+        query: str,
+        top_k_tables: int = 3,
+        top_k_instructions: int = 5,
+        top_k_requirements: int = 2
+    ):
         tables = self.vector_store.hybrid_search(query, where_filter=dict({
             "path": ["type"],
             "operator": "Equal",
