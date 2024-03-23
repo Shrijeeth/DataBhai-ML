@@ -4,8 +4,10 @@ import torch
 import weaviate
 
 
-def get_device_type() -> str:
+def get_device_type(cpu_strict=False) -> str:
     """Gets default device configuration available for the user"""
+    if cpu_strict:
+        return "cpu"
     if torch.cuda.is_available():
         return "cuda"
     if torch.backends.mps.is_available():

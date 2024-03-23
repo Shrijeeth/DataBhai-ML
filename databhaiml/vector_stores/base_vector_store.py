@@ -25,7 +25,7 @@ class BaseVectorStore(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def add_texts(self, texts: str, metadata: Optional[List[Dict]] = None):
+    def add_texts(self, texts: List[str], metadata: Optional[List[Dict]] = None):
         """
         Add texts to the vector store
         """
@@ -39,7 +39,7 @@ class BaseVectorStore(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def hybrid_search(self, query: str, whereFilter: Dict, k: Optional[int] = 5):
+    def hybrid_search(self, query: str, where_filter: Dict, k: Optional[int] = 5):
         """
         Search the vector store for similar data with metadata filters
         """

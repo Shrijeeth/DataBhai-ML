@@ -19,16 +19,37 @@ class WeaviateVectorStore(BaseVectorStore, ABC):
             self.client = weaviate.Client(weaviate_url)
         else:
             self.client = weaviate.Client(weaviate_url, auth_client_secret=weaviate.Auth.AuthApiKey(api_key=api_key))
-        self.num_results = num_results
         self.index_name = index_name
-        self.embeddings = HuggingFaceBgeEmbeddings(
-            model_name="BAAI/bge-m3",
-            encode_kwargs={"normalize_embeddings": True}
-        )
+        class_obj = {
+            "classes": [
+                {
+                    "class": self.index_name,
+                    "vectorizer": "text2vec-transformers",
+                    "moduleConfig": {
+                        "text2vec-transformers": {
+                            "vectorizeClassName": False,
+                            "inferenceUrl": "http://t2v-transformers:8080",
+                        }
+                    },
+                    "properties": [
+                        {
+                            "name": "content",
+                            "dataType": ["text"],
+                            "moduleConfig": {
+                                "text2vec-transformers": {
+                                    "skip": False,
+                                    "vectorizePropertyName": False,
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+        self.create_vector_store_schema(class_obj)
         self.vector_store = Weaviate(
             self.client,
             index_name=index_name,
-            embedding=self.embeddings,
             by_text=False,
             text_key="content"
         )
@@ -51,10 +72,9 @@ class WeaviateVectorStore(BaseVectorStore, ABC):
     def hybrid_search(self, query: str, where_filter: Dict, k: Optional[int] = 5):
         retriever = WeaviateHybridSearchRetriever(
             client=self.client,
-            index_name=self.index_name,
-            embeddings=self.embeddings,
+            index_name=self.index_name[0].capitalize() + self.index_name[1:],
             text_key="content",
-            create_schema_if_missing=True,
+            create_schema_if_missing=False,
             k=k,
         )
         return retriever.get_relevant_documents(
@@ -63,8 +83,8 @@ class WeaviateVectorStore(BaseVectorStore, ABC):
         )
 
     def create_vector_store_schema(self, schema: Dict):
-        self.client.schema.create(schema)
+        if not self.client.schema.exists(self.index_name):
+            self.client.schema.create(schema)
 
     def __del__(self):
         del self.client
-        del self.embeddings

@@ -1,4 +1,5 @@
 from llama_cpp import Llama
+from typing import Union, List
 
 import abc
 
@@ -19,12 +20,12 @@ class BaseTextModel(metaclass=abc.ABCMeta):
         )
 
     @abc.abstractmethod
-    def load_model(self, model_path: str, **kwargs) -> transformers.PreTrainedModel | Llama:
+    def load_model(self, model_path: str, **kwargs) -> Union[transformers.PreTrainedModel, Llama]:
         """Method to Load corresponding ML/DL Models"""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def load_tokenizer(self, tokenizer_path: str, **kwargs) -> transformers.PreTrainedTokenizerBase | None:
+    def load_tokenizer(self, tokenizer_path: str, **kwargs) -> Union[transformers.PreTrainedTokenizerBase, None]:
         """Method to Load tokenizer for the model to tokenize characters"""
         raise NotImplementedError
 

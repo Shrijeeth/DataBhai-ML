@@ -1,4 +1,4 @@
-from ..vector_stores.base_vector_store import BaseVectorStore
+from databhaiml.vector_stores.base_vector_store import BaseVectorStore
 from enum import Enum
 
 class TextToSqlTypes(Enum):
@@ -16,49 +16,55 @@ class TextToSqlRag:
                 "table_name": table_name,
                 "database_name": database_name,
                 "application_name": application_name,
-                "type": TextToSqlTypes.TABLE,
+                "type": str(TextToSqlTypes.TABLE),
             },
         ]
-        return self.vector_store.add_texts(table_schema, metadata=metadata)
+        return self.vector_store.add_texts([table_schema], metadata=metadata)
     
     def add_instructions(self, instructions: str, database_name: str, application_name: str):
         metadata = [
             {
                 "database_name": database_name,
                 "application_name": application_name,
-                "type": TextToSqlTypes.INSTRUCTION,
+                "type": str(TextToSqlTypes.INSTRUCTION),
             },
         ]
-        return self.vector_store.add_texts(instructions, metadata=metadata)
+        return self.vector_store.add_texts([instructions], metadata=metadata)
     
     def add_requirements(self, requirements: str, database_name: str, application_name: str):
         metadata = [
             {
                 "database_name": database_name,
                 "application_name": application_name,
-                "type": TextToSqlTypes.REQUIREMENT,
+                "type": str(TextToSqlTypes.REQUIREMENT),
             },
         ]
-        return self.vector_store.add_texts(requirements, metadata=metadata)
+        return self.vector_store.add_texts([requirements], metadata=metadata)
 
     def get_similar_texts(self, query: str, top_k_tables: int = 3, top_k_instructions: int = 5, top_k_requirements: int = 2):
-        tables = self.vector_store.hybrid_search(query, whereFilter={
-            "type": TextToSqlTypes.TABLE,
-        }, k=top_k_tables)
+        tables = self.vector_store.hybrid_search(query, where_filter=dict({
+            "path": ["type"],
+            "operator": "Equal",
+            "valueString": str(TextToSqlTypes.TABLE),
+        }), k=top_k_tables)
         table_prompt = ''
         for table in tables:
             table_prompt += table.page_content + "\n\n"
 
-        instructions = self.vector_store.hybrid_search(query, whereFilter={
-            "type": TextToSqlTypes.INSTRUCTION,
-        }, k=top_k_instructions)
+        instructions = self.vector_store.hybrid_search(query, where_filter=dict({
+            "path": ["type"],
+            "operator": "Equal",
+            "valueString": str(TextToSqlTypes.INSTRUCTION),
+        }), k=top_k_instructions)
         instruction_prompt = ''
         for instruction in instructions:
             instruction_prompt += instruction.page_content + "\n\n"
 
-        requirements = self.vector_store.hybrid_search(query, whereFilter={
-            "type": TextToSqlTypes.REQUIREMENT,
-        }, k=top_k_requirements)
+        requirements = self.vector_store.hybrid_search(query, where_filter=dict({
+            "path": ["type"],
+            "operator": "Equal",
+            "valueString": str(TextToSqlTypes.REQUIREMENT),
+        }), k=top_k_requirements)
         requirement_prompt = ''
         for requirement in requirements:
             requirement_prompt += requirement.page_content + "\n\n"

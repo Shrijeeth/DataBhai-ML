@@ -1,9 +1,9 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="databhaiml",
-    version='0.0.1',
-    packages=["models", "rag", "vector_stores", "prompts"],
+    version='0.1.9.9',
+    packages=find_packages(include=["databhaiml", "databhaiml.*"]),
     url='',
     license='',
     author='Shrijeeth',
