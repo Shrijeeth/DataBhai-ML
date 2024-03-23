@@ -25,4 +25,12 @@ Follow the build instructions to install this sample project.
     ```
     pip install -e .
     ```
-4. For hosting your own vector database in local, use docker compose file to setup your own vector database.
+4. For hosting your own vector database in local, use docker compose file to setup your own vector database. To start the vector database run the following commands from project directory
+   ```
+   docker compose up -d
+   ```
+5. For running pylint tests on project (for linting purposes), run the following commands from project directory
+   ```
+   pip install -U pylint
+   pylint $(git ls-files '*.py')
+   ```
