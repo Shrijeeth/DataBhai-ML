@@ -10,6 +10,7 @@ This package is used to load models and provide utilities for DataBhai Applicati
 - GCC Compiler
 - CMake 3.29.0 +
 - CUDA 11.7 + (Optional)
+- Docker (Optional)
 
 ## Build Instructions
 
@@ -24,3 +25,4 @@ Follow the build instructions to install this sample project.
     ```
     pip install -e .
     ```
+4. For hosting your own vector database in local, use docker compose file to setup your own vector database.
