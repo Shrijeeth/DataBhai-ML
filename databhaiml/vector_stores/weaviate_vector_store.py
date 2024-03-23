@@ -2,7 +2,7 @@
 weaviate_vector_store
 ~~~~~~~~~~~~~~~~~~~~~
 
-This module provides functionality to interact with the Weaviate vector store.
+Module that provides functionality to interact with the Weaviate vector store.
 """
 
 from abc import ABC

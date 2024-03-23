@@ -2,7 +2,7 @@
 utils
 ~~~~~
 
-This module provides general utilities for Data Bhai ML Package
+Module that provides general utilities for Data Bhai ML Package
 """
 
 import torch

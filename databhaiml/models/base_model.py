@@ -1,12 +1,22 @@
-from llama_cpp import Llama
-from typing import Union, List
+"""
+base_model
+~~~~~~~~~~
+
+Module to define base abstract classes for various tasks
+"""
 
 import abc
+from typing import Union
 
 import transformers
+from llama_cpp import Llama
 
 
 class BaseTextModel(metaclass=abc.ABCMeta):
+    """
+    Base class for text generation models.
+    """
+
     @classmethod
     def __subclasshook__(cls, subclass):
         return (
@@ -25,7 +35,11 @@ class BaseTextModel(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def load_tokenizer(self, tokenizer_path: str, **kwargs) -> Union[transformers.PreTrainedTokenizerBase, None]:
+    def load_tokenizer(
+        self,
+        tokenizer_path: str,
+        **kwargs
+    ) -> Union[transformers.PreTrainedTokenizerBase, None]:
         """Method to Load tokenizer for the model to tokenize characters"""
         raise NotImplementedError
 

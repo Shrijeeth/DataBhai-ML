@@ -2,18 +2,25 @@
 text_to_sql_rag
 ~~~~~~~~~~~~~~~
 
-This module provides functionalities for RAG for Text To SQL Tasks
+Module that provides RAG functionalities for Text To SQL Tasks
 """
 
 from enum import Enum
 from databhaiml.vector_stores.base_vector_store import BaseVectorStore
 
 class TextToSqlTypes(Enum):
+    """
+    Enum class to represent the different types of text-to-SQL Data Types.
+    """
     TABLE = "TABLE"
     INSTRUCTION = "INSTRUCTION"
     REQUIREMENT = "REQUIREMENT"
 
 class TextToSqlRag:
+    """
+    Class to handle text-to-SQL tasks using RAG.
+    """
+
     def __init__(self, vector_store: BaseVectorStore):
         self.vector_store = vector_store
 
@@ -24,6 +31,10 @@ class TextToSqlRag:
         database_name: str,
         application_name: str
     ):
+        """
+        Add tables to the vector store.
+        """
+
         metadata = [
             {
                 "table_name": table_name,
@@ -35,6 +46,10 @@ class TextToSqlRag:
         return self.vector_store.add_texts([table_schema], metadata=metadata)
 
     def add_instructions(self, instructions: str, database_name: str, application_name: str):
+        """
+        Add DB related general instructions to the vector store.
+        """
+
         metadata = [
             {
                 "database_name": database_name,
@@ -45,6 +60,9 @@ class TextToSqlRag:
         return self.vector_store.add_texts([instructions], metadata=metadata)
 
     def add_requirements(self, requirements: str, database_name: str, application_name: str):
+        """
+        Add previous requirements and queries solved to the vector store.
+        """
         metadata = [
             {
                 "database_name": database_name,
@@ -61,6 +79,19 @@ class TextToSqlRag:
         top_k_instructions: int = 5,
         top_k_requirements: int = 2
     ):
+        """
+        Get similar texts for the query.
+
+        Args:
+            query (str): The query to search for similar texts.
+            top_k_tables (int, optional): Number of tables to return. Defaults to 3.
+            top_k_instructions (int, optional): Number of instructions to return. Defaults to 5.
+            top_k_requirements (int, optional): Number of requirements to return. Defaults to 2.
+        
+        Returns:
+            list: List of similar texts.
+        """
+
         tables = self.vector_store.hybrid_search(query, where_filter=dict({
             "path": ["type"],
             "operator": "Equal",

@@ -1,13 +1,27 @@
-import transformers
+"""
+sql_generation_model
+~~~~~~~~~~~~~~~~~~~~
+
+Module that provides functionalities to load and process data 
+using LLM for SQL Generation Tasks
+"""
 
 from typing import Union
 from abc import ABC
-from .base_model import BaseTextModel
+
+import transformers
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from llama_cpp import Llama
 
+from .base_model import BaseTextModel
+
 
 class SqlGenerationModel(BaseTextModel, ABC):
+    """
+    Class to load and process data 
+    using LLM for SQL Generation Tasks which uses Base Text Model
+    """
+
     def __init__(self, model_path: str, tokenizer_path: str, is_optimized: bool = False, **kwargs):
         super().__init__()
         self.is_optimized = is_optimized
@@ -22,7 +36,11 @@ class SqlGenerationModel(BaseTextModel, ABC):
             self.model.config.use_cache = False
         return self.model
 
-    def load_tokenizer(self, tokenizer_path: str, **kwargs) -> Union[transformers.PreTrainedTokenizerBase, None]:
+    def load_tokenizer(
+        self,
+        tokenizer_path: str,
+        **kwargs
+    ) -> Union[transformers.PreTrainedTokenizerBase, None]:
         if self.is_optimized:
             return None
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
@@ -33,15 +51,15 @@ class SqlGenerationModel(BaseTextModel, ABC):
         if self.is_optimized:
             outputs = self.model(inputs, echo=False, stream=False, max_tokens=max_new_tokens)
             return outputs['choices'][0]['text']
-        else:
-            if (self.tokenizer is None) or (self.model is None):
-                raise ModuleNotFoundError("Model and Tokenizer must be loaded before text generation")
-            tokens = self.tokenizer(inputs, return_tensors="pt")
-            generated_ids = self.model.generate(
-                **tokens,
-                max_new_tokens=max_new_tokens,
-                num_beams=num_beams,
-                do_sample=False,
-            )
-            outputs = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
-            return outputs[0]
+
+        if (self.tokenizer is None) or (self.model is None):
+            raise ModuleNotFoundError("Model and Tokenizer must be loaded before text generation")
+        tokens = self.tokenizer(inputs, return_tensors="pt")
+        generated_ids = self.model.generate(
+            **tokens,
+            max_new_tokens=max_new_tokens,
+            num_beams=num_beams,
+            do_sample=False,
+        )
+        outputs = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+        return outputs[0]

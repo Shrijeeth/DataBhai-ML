@@ -2,7 +2,7 @@
 base_vector_store
 ~~~~~~~~~~~~~~~~~
 
-This module provides a base abstract class to interact with the vector databases.
+Module that provides a base abstract class to interact with the vector databases.
 """
 
 import abc
