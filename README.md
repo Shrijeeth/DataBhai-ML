@@ -2,7 +2,7 @@
 
 ## Description
 
-This package is used to load models and provide utilities for DataBhai Application
+This package is used to load models and provide utilities for DataBhai Application. Databhai is a data related library which aims to automate data related tasks using AI.
 
 ## Prerequisites
 
